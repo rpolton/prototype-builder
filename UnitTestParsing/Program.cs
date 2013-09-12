@@ -53,6 +53,95 @@ namespace UnitTestTesting
 }
 ");
 
+            syntaxTree.Dump();
+/*
+[-] Roslyn.Compilers.CSharp.CompilationUnitSyntax
+ [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax
+  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+ [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax
+  [-] Roslyn.Compilers.CSharp.QualifiedNameSyntax
+   [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+   [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+ [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax
+  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+ [-] Roslyn.Compilers.CSharp.NamespaceDeclarationSyntax
+  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+  [-] Roslyn.Compilers.CSharp.ClassDeclarationSyntax
+   [-] Roslyn.Compilers.CSharp.AttributeListSyntax
+    [-] Roslyn.Compilers.CSharp.AttributeSyntax
+     [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+   [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
+    [-] Roslyn.Compilers.CSharp.AttributeListSyntax
+     [-] Roslyn.Compilers.CSharp.AttributeSyntax
+      [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+    [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+    [.] Roslyn.Compilers.CSharp.ParameterListSyntax
+    [-] Roslyn.Compilers.CSharp.BlockSyntax
+     [-] Roslyn.Compilers.CSharp.LocalDeclarationStatementSyntax
+      [-] Roslyn.Compilers.CSharp.VariableDeclarationSyntax
+       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+       [-] Roslyn.Compilers.CSharp.VariableDeclaratorSyntax
+        [-] Roslyn.Compilers.CSharp.EqualsValueClauseSyntax
+         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+          [-] Roslyn.Compilers.CSharp.GenericNameSyntax
+           [-] Roslyn.Compilers.CSharp.TypeArgumentListSyntax
+            [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+          [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
+     [-] Roslyn.Compilers.CSharp.ExpressionStatementSyntax
+      [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+       [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+       [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
+        [-] Roslyn.Compilers.CSharp.ArgumentSyntax
+         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+          [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+          [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
+   [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
+    [-] Roslyn.Compilers.CSharp.AttributeListSyntax
+     [-] Roslyn.Compilers.CSharp.AttributeSyntax
+      [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+    [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+    [.] Roslyn.Compilers.CSharp.ParameterListSyntax
+    [-] Roslyn.Compilers.CSharp.BlockSyntax
+     [-] Roslyn.Compilers.CSharp.LocalDeclarationStatementSyntax
+      [-] Roslyn.Compilers.CSharp.VariableDeclarationSyntax
+       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+       [-] Roslyn.Compilers.CSharp.VariableDeclaratorSyntax
+        [-] Roslyn.Compilers.CSharp.EqualsValueClauseSyntax
+         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+          [-] Roslyn.Compilers.CSharp.GenericNameSyntax
+           [-] Roslyn.Compilers.CSharp.TypeArgumentListSyntax
+            [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+          [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
+     [-] Roslyn.Compilers.CSharp.ExpressionStatementSyntax
+      [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+       [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+       [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
+        [-] Roslyn.Compilers.CSharp.ArgumentSyntax
+         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+          [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+          [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
+           [-] Roslyn.Compilers.CSharp.ArgumentSyntax
+            [.] Roslyn.Compilers.CSharp.LiteralExpressionSyntax
+   [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
+    [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+    [-] Roslyn.Compilers.CSharp.ParameterListSyntax
+     [-] Roslyn.Compilers.CSharp.ParameterSyntax
+      [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+    [-] Roslyn.Compilers.CSharp.BlockSyntax
+     [-] Roslyn.Compilers.CSharp.ReturnStatementSyntax
+      [-] Roslyn.Compilers.CSharp.BinaryExpressionSyntax
+       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+       [.] Roslyn.Compilers.CSharp.LiteralExpressionSyntax              
+*/
+
             var root = (CompilationUnitSyntax)syntaxTree.GetRoot();
             var compilation = Compilation.Create("UnitTesting").
                 AddReferences(MetadataReference.CreateAssemblyReference("mscorlib")).
@@ -89,7 +178,7 @@ namespace UnitTestTesting
 
             var interfaceProgramCode = interfacesAndMethodDecls.Select(
                 o => Syntax.InterfaceDeclaration(
-                        attributeLists: new SyntaxList<AttributeListSyntax> { },
+                        attributeLists: Syntax.List<AttributeListSyntax>(),
                         modifiers: Syntax.TokenList(Syntax.Token(SyntaxKind.PublicKeyword)),
                         typeParameterList: null, //TypeParameterListSyntax,
                         baseList: null, //new BaseListSyntax(),
@@ -113,6 +202,41 @@ namespace UnitTestTesting
                             Syntax.Literal(
                             text: @"""This is it!""",
                             value: "This is it!")))))));
+
+            var classDeclaration = interfaceProgramCode.Select(CreateImplementingClass);
+            var classDecl_asString = classDeclaration.Select(pc => pc.NormalizeWhitespace().ToFullString());
+        }
+
+        // Given an interface description create an implementing class
+        private static ClassDeclarationSyntax CreateImplementingClass(InterfaceDeclarationSyntax iface)
+        {
+            var memberDecls = iface.Members.OfType<MethodDeclarationSyntax>().Select(ConstructImplementingFunction);
+            return Syntax.ClassDeclaration(attributeLists:Syntax.List<AttributeListSyntax>(),
+                modifiers:Syntax.TokenList(Syntax.Token(SyntaxKind.PublicKeyword)),
+                identifier: Syntax.Identifier("className"),
+                typeParameterList: null,
+                baseList: Syntax.BaseList(Syntax.SeparatedList<TypeSyntax>().Add(new [] {Syntax.IdentifierName(iface.Identifier)})),
+                constraintClauses: null,
+                members: Syntax.List<MemberDeclarationSyntax>(memberDecls));
+        }
+
+        private static MemberDeclarationSyntax ConstructImplementingFunction(MethodDeclarationSyntax method)
+        {
+            var assertionAttrs = method.AttributeLists.First();
+            var expectedReturnValue = DeriveExpectedReturnValue((InvocationExpressionSyntax)(assertionAttrs.Attributes.First().ArgumentList.Arguments.First().Expression));
+            // DeriveExpectedReturnValue from the method attribute list
+            var returnStmt = Syntax.ReturnStatement(Syntax.Token(SyntaxKind.ReturnKeyword), expectedReturnValue,
+                //Syntax.ParseExpression("new " + method.ReturnType.ToString() + "()"), 
+                Syntax.Token(SyntaxKind.SemicolonToken));
+            return Syntax.MethodDeclaration(attributeLists: Syntax.List<AttributeListSyntax>(),
+                modifiers: Syntax.TokenList(Syntax.Token(SyntaxKind.PublicKeyword)),
+                returnType: method.ReturnType,
+                explicitInterfaceSpecifier: null,
+                identifier: method.Identifier,
+                typeParameterList: null,
+                parameterList: method.ParameterList,
+                constraintClauses: null,
+                body: Syntax.Block(statements: new[] { returnStmt }));
         }
 
         private class NameAndInterface
@@ -196,9 +320,7 @@ namespace UnitTestTesting
                 var fpt = functionParameterTypes.ToList();
 
                 var callingAssertionExpr = invocationExpr.Parent.Parent.Parent as InvocationExpressionSyntax; // Assert.IsTrue(a.DoIt())
-                // Need SemanticModel here to determine type of the assertion function parameter. For now, we know that IsTrue expects a bool
-                var n = (callingAssertionExpr.Expression as MemberAccessExpressionSyntax).Name.Identifier.ValueText;
-                var returnType = Syntax.ParseTypeName(n == "IsTrue" ? "bool" : "void");
+                var returnType = ExtractAssertionReturnType(callingAssertionExpr);
 
                 yield return new InterfaceNameAndMethodDeclarations
                 {
@@ -210,9 +332,45 @@ namespace UnitTestTesting
                             t => t.WithParameterList(Syntax.ParameterList(
                                     Syntax.SeparatedList<ParameterSyntax>(fpt, Enumerable.Repeat(Syntax.Token(SyntaxKind.CommaToken), fpt.Count - 1)))),
                             () => functionParameterTypes.Any()).
-                        WithSemicolonToken(Syntax.Token(SyntaxKind.SemicolonToken))}
+                        WithSemicolonToken(Syntax.Token(SyntaxKind.SemicolonToken)).
+                        WithAttributeLists(Syntax.List<AttributeListSyntax>(Syntax.AttributeList().WithAttributes(Syntax.SeparatedList<AttributeSyntax>(Syntax.Attribute(Syntax.ParseName("AssertionOriginAttribute"),Syntax.AttributeArgumentList(callingAssertionExpr.ToAttributeArgumentSyntaxList()))))))}
                 };
             }
+        }
+
+        public static TypeSyntax ExtractAssertionReturnType(InvocationExpressionSyntax expr)
+        {
+            // Need SemanticModel here to determine type of the assertion function parameter. For now, we know that IsTrue expects a bool
+            var method = ExtractAssertionMethod(expr);
+            var returnType = Syntax.ParseTypeName(method == "IsTrue" ? "bool" : "void");
+            return returnType;
+        }
+
+        public static string ExtractAssertionMethod(InvocationExpressionSyntax expr)
+        {
+            var method = (expr.Expression as MemberAccessExpressionSyntax).Name.Identifier.ValueText;
+            return method;
+        }
+
+        public static LiteralExpressionSyntax DeriveExpectedReturnValue(InvocationExpressionSyntax expr)
+        {
+            var method = ExtractAssertionMethod(expr);
+            switch (method)
+            {
+                case "IsTrue": 
+                    return Syntax.LiteralExpression(
+                            SyntaxKind.TrueLiteralExpression,
+                            Syntax.Token(SyntaxKind.TrueKeyword));
+                case "IsFalse": 
+                    return Syntax.LiteralExpression(
+                            SyntaxKind.FalseLiteralExpression,
+                            Syntax.Token(SyntaxKind.FalseKeyword));
+                default: 
+                    return Syntax.LiteralExpression(
+                            SyntaxKind.FalseLiteralExpression,
+                            Syntax.Token(SyntaxKind.FalseKeyword));
+            }
+
         }
 
         public static IEnumerable<T> Repeat<T>(Func<int, T> f)
@@ -248,6 +406,49 @@ namespace UnitTestTesting
             {
                 ReportMethods(nested);
             }
+        }
+    }
+
+    // See more at: http://www.amazedsaint.com/2012/07/bending-your-code-like-anders-with-c.html#sthash.IvwWIQ1T.dpuf
+    public static class SyntaxTreeExtensions 
+    {
+        public static void Dump(this SyntaxTree tree) 
+        {
+            var writer = new ConsoleDumpWalker(); 
+            writer.Visit(tree.GetRoot()); 
+        }
+        
+        class ConsoleDumpWalker : SyntaxWalker 
+        {
+            public override void Visit(SyntaxNode node)
+            {
+                int padding = node.Ancestors().Count(); 
+                //To identify leaf nodes vs nodes with children 
+                string prepend = node.ChildNodes().Count() > 0 ? "[-]" : "[.]"; 
+                //Get the type of the node 
+                string line = new String(' ', padding) + prepend + " " + node.GetType().ToString(); 
+                //Write the line 
+                System.Console.WriteLine(line); 
+                base.Visit(node);
+            }
+        }
+    }
+
+    public class AssertionOriginAttribute : Attribute
+    {
+        public AssertionOriginAttribute(ExpressionSyntax expr):base()
+        {
+            Expression = expr;
+        }
+
+        public ExpressionSyntax Expression { get; private set; }
+    }
+
+    public static class Convert
+    {
+        public static SeparatedSyntaxList<AttributeArgumentSyntax> ToAttributeArgumentSyntaxList(this ExpressionSyntax expr)
+        {
+            return Syntax.SeparatedList<AttributeArgumentSyntax>(Syntax.AttributeArgument(expr));
         }
     }
 }
