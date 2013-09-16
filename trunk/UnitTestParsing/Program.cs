@@ -54,93 +54,93 @@ namespace UnitTestTesting
 ");
 
             syntaxTree.Dump();
-/*
-[-] Roslyn.Compilers.CSharp.CompilationUnitSyntax
- [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax
-  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
- [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax
-  [-] Roslyn.Compilers.CSharp.QualifiedNameSyntax
-   [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-   [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
- [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax
-  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
- [-] Roslyn.Compilers.CSharp.NamespaceDeclarationSyntax
-  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-  [-] Roslyn.Compilers.CSharp.ClassDeclarationSyntax
-   [-] Roslyn.Compilers.CSharp.AttributeListSyntax
-    [-] Roslyn.Compilers.CSharp.AttributeSyntax
-     [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-   [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
-    [-] Roslyn.Compilers.CSharp.AttributeListSyntax
-     [-] Roslyn.Compilers.CSharp.AttributeSyntax
-      [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-    [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
-    [.] Roslyn.Compilers.CSharp.ParameterListSyntax
-    [-] Roslyn.Compilers.CSharp.BlockSyntax
-     [-] Roslyn.Compilers.CSharp.LocalDeclarationStatementSyntax
-      [-] Roslyn.Compilers.CSharp.VariableDeclarationSyntax
-       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-       [-] Roslyn.Compilers.CSharp.VariableDeclaratorSyntax
-        [-] Roslyn.Compilers.CSharp.EqualsValueClauseSyntax
-         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
-          [-] Roslyn.Compilers.CSharp.GenericNameSyntax
-           [-] Roslyn.Compilers.CSharp.TypeArgumentListSyntax
-            [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-          [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
-     [-] Roslyn.Compilers.CSharp.ExpressionStatementSyntax
-      [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
-       [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
-        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-       [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
-        [-] Roslyn.Compilers.CSharp.ArgumentSyntax
-         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
-          [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
-           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-          [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
-   [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
-    [-] Roslyn.Compilers.CSharp.AttributeListSyntax
-     [-] Roslyn.Compilers.CSharp.AttributeSyntax
-      [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-    [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
-    [.] Roslyn.Compilers.CSharp.ParameterListSyntax
-    [-] Roslyn.Compilers.CSharp.BlockSyntax
-     [-] Roslyn.Compilers.CSharp.LocalDeclarationStatementSyntax
-      [-] Roslyn.Compilers.CSharp.VariableDeclarationSyntax
-       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-       [-] Roslyn.Compilers.CSharp.VariableDeclaratorSyntax
-        [-] Roslyn.Compilers.CSharp.EqualsValueClauseSyntax
-         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
-          [-] Roslyn.Compilers.CSharp.GenericNameSyntax
-           [-] Roslyn.Compilers.CSharp.TypeArgumentListSyntax
-            [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-          [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
-     [-] Roslyn.Compilers.CSharp.ExpressionStatementSyntax
-      [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
-       [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
-        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-       [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
-        [-] Roslyn.Compilers.CSharp.ArgumentSyntax
-         [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
-          [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
-           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-           [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-          [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
-           [-] Roslyn.Compilers.CSharp.ArgumentSyntax
-            [.] Roslyn.Compilers.CSharp.LiteralExpressionSyntax
-   [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
-    [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
-    [-] Roslyn.Compilers.CSharp.ParameterListSyntax
-     [-] Roslyn.Compilers.CSharp.ParameterSyntax
-      [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
-    [-] Roslyn.Compilers.CSharp.BlockSyntax
-     [-] Roslyn.Compilers.CSharp.ReturnStatementSyntax
-      [-] Roslyn.Compilers.CSharp.BinaryExpressionSyntax
-       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
-       [.] Roslyn.Compilers.CSharp.LiteralExpressionSyntax              
-*/
+            /*
+            [-] Roslyn.Compilers.CSharp.CompilationUnitSyntax
+             [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax -- using System;
+              [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+             [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax -- using NUnit.Framework;
+              [-] Roslyn.Compilers.CSharp.QualifiedNameSyntax
+               [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+               [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+             [-] Roslyn.Compilers.CSharp.UsingDirectiveSyntax -- using Moq;
+              [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+             [-] Roslyn.Compilers.CSharp.NamespaceDeclarationSyntax -- namespace UnitTestTesting
+              [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+              [-] Roslyn.Compilers.CSharp.ClassDeclarationSyntax -- [TestFixture] public class TestsInHere
+               [-] Roslyn.Compilers.CSharp.AttributeListSyntax
+                [-] Roslyn.Compilers.CSharp.AttributeSyntax
+                 [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+               [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax -- [Test] public void ThisIsATest1
+                [-] Roslyn.Compilers.CSharp.AttributeListSyntax
+                 [-] Roslyn.Compilers.CSharp.AttributeSyntax
+                  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+                [.] Roslyn.Compilers.CSharp.ParameterListSyntax
+                [-] Roslyn.Compilers.CSharp.BlockSyntax
+                 [-] Roslyn.Compilers.CSharp.LocalDeclarationStatementSyntax -- var a = Mock<AnInterface>();
+                  [-] Roslyn.Compilers.CSharp.VariableDeclarationSyntax
+                   [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                   [-] Roslyn.Compilers.CSharp.VariableDeclaratorSyntax
+                    [-] Roslyn.Compilers.CSharp.EqualsValueClauseSyntax
+                     [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+                      [-] Roslyn.Compilers.CSharp.GenericNameSyntax
+                       [-] Roslyn.Compilers.CSharp.TypeArgumentListSyntax
+                        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                      [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
+                 [-] Roslyn.Compilers.CSharp.ExpressionStatementSyntax -- Assert.IsTrue(a.DoIt());
+                  [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+                   [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+                    [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                    [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                   [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
+                    [-] Roslyn.Compilers.CSharp.ArgumentSyntax
+                     [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax -- a.DoIt()
+                      [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+                       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                      [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
+               [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
+                [-] Roslyn.Compilers.CSharp.AttributeListSyntax
+                 [-] Roslyn.Compilers.CSharp.AttributeSyntax
+                  [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+                [.] Roslyn.Compilers.CSharp.ParameterListSyntax
+                [-] Roslyn.Compilers.CSharp.BlockSyntax
+                 [-] Roslyn.Compilers.CSharp.LocalDeclarationStatementSyntax
+                  [-] Roslyn.Compilers.CSharp.VariableDeclarationSyntax
+                   [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                   [-] Roslyn.Compilers.CSharp.VariableDeclaratorSyntax
+                    [-] Roslyn.Compilers.CSharp.EqualsValueClauseSyntax
+                     [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+                      [-] Roslyn.Compilers.CSharp.GenericNameSyntax
+                       [-] Roslyn.Compilers.CSharp.TypeArgumentListSyntax
+                        [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                      [.] Roslyn.Compilers.CSharp.ArgumentListSyntax
+                 [-] Roslyn.Compilers.CSharp.ExpressionStatementSyntax
+                  [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+                   [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+                    [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                    [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                   [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
+                    [-] Roslyn.Compilers.CSharp.ArgumentSyntax
+                     [-] Roslyn.Compilers.CSharp.InvocationExpressionSyntax
+                      [-] Roslyn.Compilers.CSharp.MemberAccessExpressionSyntax
+                       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                       [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                      [-] Roslyn.Compilers.CSharp.ArgumentListSyntax
+                       [-] Roslyn.Compilers.CSharp.ArgumentSyntax
+                        [.] Roslyn.Compilers.CSharp.LiteralExpressionSyntax
+               [-] Roslyn.Compilers.CSharp.MethodDeclarationSyntax
+                [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+                [-] Roslyn.Compilers.CSharp.ParameterListSyntax
+                 [-] Roslyn.Compilers.CSharp.ParameterSyntax
+                  [.] Roslyn.Compilers.CSharp.PredefinedTypeSyntax
+                [-] Roslyn.Compilers.CSharp.BlockSyntax
+                 [-] Roslyn.Compilers.CSharp.ReturnStatementSyntax
+                  [-] Roslyn.Compilers.CSharp.BinaryExpressionSyntax
+                   [.] Roslyn.Compilers.CSharp.IdentifierNameSyntax
+                   [.] Roslyn.Compilers.CSharp.LiteralExpressionSyntax              
+            */
 
             var root = (CompilationUnitSyntax)syntaxTree.GetRoot();
             var compilation = Compilation.Create("UnitTesting").
@@ -223,7 +223,7 @@ namespace UnitTestTesting
         private static MemberDeclarationSyntax ConstructImplementingFunction(MethodDeclarationSyntax method)
         {
             var assertionAttrs = method.AttributeLists.First();
-            var expectedReturnValue = DeriveExpectedReturnValue((InvocationExpressionSyntax)(assertionAttrs.Attributes.First().ArgumentList.Arguments.First().Expression));
+            var expectedReturnValue = DeriveExpectedReturnExpression((InvocationExpressionSyntax)(assertionAttrs.Attributes.First().ArgumentList.Arguments.First().Expression));
             // DeriveExpectedReturnValue from the method attribute list
             var returnStmt = Syntax.ReturnStatement(Syntax.Token(SyntaxKind.ReturnKeyword), expectedReturnValue,
                 //Syntax.ParseExpression("new " + method.ReturnType.ToString() + "()"), 
@@ -352,24 +352,32 @@ namespace UnitTestTesting
             return method;
         }
 
-        public static LiteralExpressionSyntax DeriveExpectedReturnValue(InvocationExpressionSyntax expr)
+        public static ExpressionSyntax DeriveExpectedReturnExpression(InvocationExpressionSyntax expr)
         {
             var method = ExtractAssertionMethod(expr);
-            switch (method)
+
+            var assertionArgList = expr.DescendantNodes().OfType<ArgumentListSyntax>(); // a.DoIt() or a.Verify(1)
+            var functionUnderTestArgList = assertionArgList.SelectMany(args => args.DescendantNodes().OfType<ArgumentListSyntax>()); // () or (1)
+            if (functionUnderTestArgList.First().Arguments.Any())
             {
-                case "IsTrue": 
-                    return Syntax.LiteralExpression(
-                            SyntaxKind.TrueLiteralExpression,
-                            Syntax.Token(SyntaxKind.TrueKeyword));
-                case "IsFalse": 
-                    return Syntax.LiteralExpression(
-                            SyntaxKind.FalseLiteralExpression,
-                            Syntax.Token(SyntaxKind.FalseKeyword));
-                default: 
-                    return Syntax.LiteralExpression(
-                            SyntaxKind.FalseLiteralExpression,
-                            Syntax.Token(SyntaxKind.FalseKeyword));
+                return Syntax.BinaryExpression(SyntaxKind.EqualsExpression,Syntax.IdentifierName("a"),functionUnderTestArgList.First().Arguments.First().Expression);
             }
+            else
+                switch (method)
+                {
+                    case "IsTrue":
+                        return Syntax.LiteralExpression(
+                                SyntaxKind.TrueLiteralExpression,
+                                Syntax.Token(SyntaxKind.TrueKeyword));
+                    case "IsFalse":
+                        return Syntax.LiteralExpression(
+                                SyntaxKind.FalseLiteralExpression,
+                                Syntax.Token(SyntaxKind.FalseKeyword));
+                    default:
+                        return Syntax.LiteralExpression(
+                                SyntaxKind.FalseLiteralExpression,
+                                Syntax.Token(SyntaxKind.FalseKeyword));
+                }
 
         }
 
