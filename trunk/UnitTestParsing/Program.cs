@@ -45,6 +45,13 @@ namespace UnitTestTesting
             Assert.IsTrue(a.Verify(1));
         }
 
+        [Test]
+        public void ThisIsATest3()
+        {
+            var a = Mock<AnInterface>();
+            Assert.IsFalse(a.Verify(2));
+        }
+
         private static bool Predicate(int a)
         {
             return a>=0;
@@ -174,7 +181,8 @@ namespace UnitTestTesting
 //            var vardecl = (VariableDeclarationSyntax)(((LocalDeclarationStatementSyntax)(testMethod.Body.Statements[0])).Declaration);
 
             // this should be a list of structures, each of which contains all the expected methods the named interface should expose
-            var interfacesAndMethodDecls = ConstructMethodDeclarations(model, methodsHavingTestAttributes);
+            var old_interfacesAndMethodDecls = ConstructMethodDeclarations(model, methodsHavingTestAttributes);
+            var interfacesAndMethodDecls = ConstructMethodDeclarations1(model, methodsHavingTestAttributes);
 
             var interfaceProgramCode = interfacesAndMethodDecls.Select(
                 o => Syntax.InterfaceDeclaration(
@@ -187,24 +195,24 @@ namespace UnitTestTesting
                         members: Syntax.List<MemberDeclarationSyntax>(o.ToList().SelectMany(i=>i.MethodDecls))));
 
             var interfaceProgramCode_asString = interfaceProgramCode.Select(pc => pc.NormalizeWhitespace().ToFullString());
-            
-            var newStatement = Syntax.ExpressionStatement(
-                Syntax.InvocationExpression(
-                    Syntax.MemberAccessExpression(
-                        SyntaxKind.MemberAccessExpression,
-                        Syntax.IdentifierName("Console"),
-                        name: Syntax.IdentifierName("WriteLine")),
-                    Syntax.ArgumentList(
-                    arguments: Syntax.SeparatedList<ArgumentSyntax>(
-                        Syntax.Argument(
-                        expression: Syntax.LiteralExpression(
-                            SyntaxKind.StringLiteralExpression,
-                            Syntax.Literal(
-                            text: @"""This is it!""",
-                            value: "This is it!")))))));
+
+            //var newStatement = Syntax.ExpressionStatement(
+            //    Syntax.InvocationExpression(
+            //        Syntax.MemberAccessExpression(
+            //            SyntaxKind.MemberAccessExpression,
+            //            Syntax.IdentifierName("Console"),
+            //            name: Syntax.IdentifierName("WriteLine")),
+            //        Syntax.ArgumentList(
+            //        arguments: Syntax.SeparatedList<ArgumentSyntax>(
+            //            Syntax.Argument(
+            //            expression: Syntax.LiteralExpression(
+            //                SyntaxKind.StringLiteralExpression,
+            //                Syntax.Literal(
+            //                text: @"""This is it!""",
+            //                value: "This is it!")))))));
 
             var classDeclaration = interfaceProgramCode.Select(CreateImplementingClass);
-            var classDecl_asString = classDeclaration.Select(pc => pc.NormalizeWhitespace().ToFullString());
+            var classDecl_asString = classDeclaration.Select(pc => pc.NormalizeWhitespace().ToFullString()).ToList()[0];
         }
 
         // Given an interface description create an implementing class
@@ -284,6 +292,103 @@ namespace UnitTestTesting
             return interfaceMethodDecls.GroupBy(ifn => ifn.Name);
         }
 
+        struct AssertedInterface
+        {
+            public string Interface { get; set; }
+            public ExpressionStatementSyntax AssertedMock{get;set;}
+            public InvocationExpressionSyntax Invocation { get; set; }
+        }
+
+        public static IEnumerable<IGrouping<string, InterfaceNameAndMethodDeclarations>> ConstructMethodDeclarations1(SemanticModel model, IEnumerable<MethodDeclarationSyntax> methodsHavingTestAttributes)
+        {
+            List<AssertedInterface> assertedInterfaces = new List<AssertedInterface>();
+
+            foreach (var testMethodDeclaration in methodsHavingTestAttributes)
+            {
+                // find the mocks
+                var mocks = testMethodDeclaration.Body.Statements.SelectMany(stmt => stmt.DescendantNodes().OfType<GenericNameSyntax>()).
+                    Where(nm => nm.Identifier.ValueText == "Mock");
+                Func<GenericNameSyntax,IEnumerable<string>> mockedInterfaceTypes = mock => mock.TypeArgumentList.Arguments.OfType<IdentifierNameSyntax>().
+                    Select(ident => ident.Identifier.ValueText); // "AnInterface"
+
+                // Find the variable declarations => get the names.  Recurse up through the tree from the mocks to find the variable declarations.
+                var varDecls = mocks.Select(mock => new { Mock = mock, Decl = mock.Ancestors().OfType<VariableDeclarationSyntax>().First() });
+                var varIdents = varDecls.Select(decl => new { Mock = decl.Mock, Identifier = decl.Decl.DescendantNodes().OfType<VariableDeclaratorSyntax>().First().Identifier });
+                var varNames = varIdents.Select(decl=>decl.Identifier.ValueText).ToList();
+
+                // find the asserts
+                var asserts = testMethodDeclaration.Body.Statements.SelectMany(stmt => stmt.DescendantNodesAndSelf().OfType<ExpressionStatementSyntax>()).
+                    Where(expr => expr.DescendantNodes().OfType<IdentifierNameSyntax>().Any(node => node.Identifier.ValueText == "Assert"));
+                // find the mocks' accesses -> fn names and parameters, return values. We don't care about functions which are not 'assert'ed so
+                // search down from 'asserts' instead of 'testMethodDeclaration.Body.Statements'
+                var assertedMocks = asserts.Where(stmt => stmt.DescendantNodes().OfType<IdentifierNameSyntax>().Select(id => id.Identifier.ValueText).Intersect(varNames).Any()); // Assert.IsTrue(a.DoIt());
+
+                //var returnContainer = mocks.Select(mock => new { Interface = mockedInterfaceTypes(mock),
+                //Invocations = assertedMocks.Where(assertedMock => )});
+
+                Func<ExpressionStatementSyntax, IEnumerable<InvocationExpressionSyntax>> extractInvocations =
+                    expr => expr.DescendantNodes().OfType<ArgumentListSyntax>().SelectMany(node => node.DescendantNodes().OfType<InvocationExpressionSyntax>());
+
+                var joinedMocksAndAssertedMocks = varIdents.Join(assertedMocks, 
+                    ident => ident.Identifier.ValueText,
+                    assertedMock => extractInvocations(assertedMock).First().DescendantNodes().OfType<IdentifierNameSyntax>().First().Identifier.ValueText,
+                    (ident, assertedMock) => new AssertedInterface
+                    {
+                        Interface = mockedInterfaceTypes(ident.Mock).First(),
+                        AssertedMock = assertedMock,
+                        Invocation = extractInvocations(assertedMock).First()
+                    });
+
+                assertedInterfaces.AddRange(joinedMocksAndAssertedMocks);
+            }
+
+            // perform some sort of grouping - we need a single instance of each function but there could be multiple assertions for each function
+            // For each assertedInterface, group all the assertions for each function together
+            var groupedInterfaces = assertedInterfaces.GroupBy(aif => aif.Interface);
+
+            var methodDecls = new List<InterfaceNameAndMethodDeclarations>();
+            foreach (var groupedInterface in groupedInterfaces)
+            {
+                var groupByFn = groupedInterface.GroupBy(grp=>grp.Invocation.DescendantNodes().OfType<IdentifierNameSyntax>().Skip(1).First().ToString());
+                foreach (var gf in groupByFn)
+                {
+                    var methodCalls = gf.ToList();
+                    var firstInvocation = methodCalls[0];
+                    var returnType = ExtractAssertionReturnType(firstInvocation.AssertedMock);
+
+                    // Could call model.GetTypeInfo(invocationExpr) but none of the names involved are defined so the function returns ErrorType, ie unknown
+                    var invocationArgList = firstInvocation.Invocation.ArgumentList as ArgumentListSyntax;
+                    var invocationArgs = invocationArgList.Arguments;
+                    var functionParameterTypes = invocationArgs.Select(argSyntax =>
+                    {
+                        var argType = model.GetTypeInfo(argSyntax.Expression).Type;
+                        return Syntax.Parameter(Syntax.Identifier(@"a")).WithType(Syntax.ParseTypeName(argType.Name));
+                    });
+                    var fpt = functionParameterTypes.ToList();
+
+                    var method = new InterfaceNameAndMethodDeclarations
+                    {
+                        Name = groupedInterface.Key,
+                        MethodDecls = new[]{
+                            Syntax.MethodDeclaration(returnType, gf.Key).
+                            WithModifiers(Syntax.TokenList(Syntax.Token(SyntaxKind.PublicKeyword))).
+                            WithTfmIfTrue(
+                                t => t.WithParameterList(Syntax.ParameterList(
+                                        Syntax.SeparatedList<ParameterSyntax>(fpt, Enumerable.Repeat(Syntax.Token(SyntaxKind.CommaToken), fpt.Count - 1)))),
+                                () => functionParameterTypes.Any()).
+                            WithSemicolonToken(Syntax.Token(SyntaxKind.SemicolonToken)).
+                            WithAttributeLists(Syntax.List<AttributeListSyntax>(Syntax.AttributeList().WithAttributes(
+                                methodCalls.Select(invocation=>Syntax.Attribute(Syntax.ParseName("AssertionOriginAttribute"),Syntax.AttributeArgumentList(invocation.AssertedMock.ToAttributeArgumentSyntaxList()))).ToSeparatedSyntaxList())))
+                        }
+                    };
+
+                    methodDecls.Add(method);
+                }
+            }
+
+            return methodDecls.GroupBy(methodDecl => methodDecl.Name);
+        }
+
         public class InterfaceNameAndMethodDeclarations
         {
             public string Name { get; set; }
@@ -336,6 +441,14 @@ namespace UnitTestTesting
                         WithAttributeLists(Syntax.List<AttributeListSyntax>(Syntax.AttributeList().WithAttributes(Syntax.SeparatedList<AttributeSyntax>(Syntax.Attribute(Syntax.ParseName("AssertionOriginAttribute"),Syntax.AttributeArgumentList(callingAssertionExpr.ToAttributeArgumentSyntaxList()))))))}
                 };
             }
+        }
+
+        public static TypeSyntax ExtractAssertionReturnType(ExpressionStatementSyntax expr)
+        {
+            // Need SemanticModel here to determine type of the assertion function parameter. For now, we know that IsTrue expects a bool
+            var method = ExtractAssertionMethod(expr.DescendantNodes().OfType<InvocationExpressionSyntax>().First());
+            var returnType = Syntax.ParseTypeName(method == "IsTrue" ? "bool" : "void");
+            return returnType;
         }
 
         public static TypeSyntax ExtractAssertionReturnType(InvocationExpressionSyntax expr)
@@ -454,11 +567,22 @@ namespace UnitTestTesting
 
     public static class Convert
     {
+        public static SeparatedSyntaxList<AttributeArgumentSyntax> ToAttributeArgumentSyntaxList(this ExpressionStatementSyntax expr)
+        {
+            return Syntax.SeparatedList<AttributeArgumentSyntax>(Syntax.AttributeArgument(expr.Expression));
+        }
+
         public static SeparatedSyntaxList<AttributeArgumentSyntax> ToAttributeArgumentSyntaxList(this ExpressionSyntax expr)
         {
             return Syntax.SeparatedList<AttributeArgumentSyntax>(Syntax.AttributeArgument(expr));
         }
+
+        public static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> input) where T:SyntaxNode
+        {
+            var retval = Syntax.SeparatedList<T>();
+            foreach (var element in input)
+                retval = retval.Add(element);
+            return retval;
+        }
     }
 }
-
-
