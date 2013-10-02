@@ -181,8 +181,7 @@ namespace UnitTestTesting
 //            var vardecl = (VariableDeclarationSyntax)(((LocalDeclarationStatementSyntax)(testMethod.Body.Statements[0])).Declaration);
 
             // this should be a list of structures, each of which contains all the expected methods the named interface should expose
-            var old_interfacesAndMethodDecls = ConstructMethodDeclarations(model, methodsHavingTestAttributes);
-            var interfacesAndMethodDecls = ConstructMethodDeclarations1(model, methodsHavingTestAttributes);
+            var interfacesAndMethodDecls = ConstructMethodDeclarations(model, methodsHavingTestAttributes);
 
             var interfaceProgramCode = interfacesAndMethodDecls.Select(
                 o => Syntax.InterfaceDeclaration(
@@ -231,7 +230,11 @@ namespace UnitTestTesting
         private static MemberDeclarationSyntax ConstructImplementingFunction(MethodDeclarationSyntax method)
         {
             var assertionAttrs = method.AttributeLists.First();
-            var expectedReturnValue = DeriveExpectedReturnExpression((InvocationExpressionSyntax)(assertionAttrs.Attributes.First().ArgumentList.Arguments.First().Expression));
+            var expectedReturnValues = assertionAttrs.Attributes.Select(attr=>DeriveExpectedReturnExpression((InvocationExpressionSyntax)(attr.ArgumentList.Arguments.First().Expression))).ToList();
+            //var expectedReturnValue = DeriveExpectedReturnExpression((InvocationExpressionSyntax)(assertionAttrs.Attributes.First().ArgumentList.Arguments.First().Expression));
+            var expectedReturnValue = expectedReturnValues.Count()>1
+                ?Syntax.BinaryExpression(SyntaxKind.LogicalAndExpression,expectedReturnValues[0],expectedReturnValues[1])
+                :expectedReturnValues[0];
             // DeriveExpectedReturnValue from the method attribute list
             var returnStmt = Syntax.ReturnStatement(Syntax.Token(SyntaxKind.ReturnKeyword), expectedReturnValue,
                 //Syntax.ParseExpression("new " + method.ReturnType.ToString() + "()"), 
@@ -253,45 +256,6 @@ namespace UnitTestTesting
             public IEnumerable<string> MockedTypes { get; set; }
         }
 
-        /// <summary>
-        /// Given a sequence of test methods, find all the interfaces and methods expected to be defined by an implementing class
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="methodsHavingTestAttributes"></param>
-        /// <returns></returns>
-        public static IEnumerable<IGrouping<string,InterfaceNameAndMethodDeclarations>> ConstructMethodDeclarations(SemanticModel model, IEnumerable<MethodDeclarationSyntax> methodsHavingTestAttributes)
-        {
-            var interfaceMethodDecls = new List<InterfaceNameAndMethodDeclarations>();
-            foreach (var testMethodDeclaration in methodsHavingTestAttributes)
-            {
-                var variableDecls = testMethodDeclaration.Body.Statements.OfType<LocalDeclarationStatementSyntax>().
-                    Select(stmt => stmt.Declaration).Cast<VariableDeclarationSyntax>();
-
-                var mocks = variableDecls.SelectMany(varDecl => varDecl.DescendantNodes().OfType<GenericNameSyntax>()).
-                    Where(nm => nm.Identifier.ValueText == "Mock");
-                var mockedInterfaceTypes = mocks.SelectMany(mock => mock.TypeArgumentList.Arguments.OfType<IdentifierNameSyntax>()).
-                    Select(ident => ident.Identifier.ValueText); // "AnInterface"
-
-                var variableName = variableDecls.First().Variables.OfType<VariableDeclaratorSyntax>().First().Identifier.ValueText; // "a"
-
-                var theMockVariableDeclarations = variableDecls.
-                    Where(varDecl => varDecl.DescendantNodes().OfType<GenericNameSyntax>().Any(nm => nm.Identifier.ValueText == "Mock"));
-                var varNamesAndInterfaces = theMockVariableDeclarations.
-                    SelectMany(varDecl => varDecl.DescendantNodes().OfType<GenericNameSyntax>()).
-                    Where(nm => nm.Identifier.ValueText == "Mock").
-                    Select(mock => new NameAndInterface
-                    {
-                        Name = (mock.Parent.Parent.Parent as VariableDeclaratorSyntax).Identifier.ValueText,
-                        MockedTypes = mock.TypeArgumentList.Arguments.OfType<IdentifierNameSyntax>().Select(ident => ident.Identifier.ValueText)
-                    }); // "a", {"AnInterface"}
-
-                var variableAccesses = testMethodDeclaration.Body.DescendantNodes().OfType<MemberAccessExpressionSyntax>();
-
-                interfaceMethodDecls.AddRange(ConstructMethodDeclarations(model, variableAccesses, varNamesAndInterfaces));
-            }
-            return interfaceMethodDecls.GroupBy(ifn => ifn.Name);
-        }
-
         struct AssertedInterface
         {
             public string Interface { get; set; }
@@ -299,7 +263,13 @@ namespace UnitTestTesting
             public InvocationExpressionSyntax Invocation { get; set; }
         }
 
-        public static IEnumerable<IGrouping<string, InterfaceNameAndMethodDeclarations>> ConstructMethodDeclarations1(SemanticModel model, IEnumerable<MethodDeclarationSyntax> methodsHavingTestAttributes)
+        /// <summary>
+        /// Given a sequence of test methods, find all the interfaces and methods expected to be defined by an implementing class
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="methodsHavingTestAttributes"></param>
+        /// <returns></returns>
+        public static IEnumerable<IGrouping<string, InterfaceNameAndMethodDeclarations>> ConstructMethodDeclarations(SemanticModel model, IEnumerable<MethodDeclarationSyntax> methodsHavingTestAttributes)
         {
             List<AssertedInterface> assertedInterfaces = new List<AssertedInterface>();
 
@@ -395,54 +365,6 @@ namespace UnitTestTesting
             public IEnumerable<MethodDeclarationSyntax> MethodDecls { get; set; }
         }
 
-        /// <summary>
-        ///  Given a sequence of member access expressions and variables names, match the variables and interfaces and return a sequence of
-        ///  interface name / method declaration pairs.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="variableAccesses"></param>
-        /// <param name="varNamesAndInterfaces"></param>
-        /// <returns></returns>
-        private static IEnumerable<InterfaceNameAndMethodDeclarations> ConstructMethodDeclarations(SemanticModel model, IEnumerable<MemberAccessExpressionSyntax> variableAccesses, IEnumerable<NameAndInterface> varNamesAndInterfaces)
-        {
-            foreach (var nameAndType in varNamesAndInterfaces)
-            {
-                var varName = nameAndType.Name;
-                var mockedInterfaceTypes = nameAndType.MockedTypes;
-
-                var accesses = variableAccesses.Where(acc => (acc.Expression as IdentifierNameSyntax).Identifier.ValueText == varName);
-                var functionNames = accesses.Select(acc => (acc.Name as IdentifierNameSyntax).Identifier.ValueText); // "DoIt" // "Verify"
-
-                var invocationExpr = accesses.First().Parent as InvocationExpressionSyntax;
-                // Could call model.GetTypeInfo(invocationExpr) but none of the names involved are defined so the function returns ErrorType, ie unknown
-                var invocationArgList = invocationExpr.ArgumentList as ArgumentListSyntax;
-                var invocationArgs = invocationArgList.Arguments;
-                var functionParameterTypes = invocationArgs.Select(argSyntax =>
-                {
-                    var argType = model.GetTypeInfo(argSyntax.Expression).Type;
-                    return Syntax.Parameter(Syntax.Identifier(@"a")).WithType(Syntax.ParseTypeName(argType.Name));
-                });
-                var fpt = functionParameterTypes.ToList();
-
-                var callingAssertionExpr = invocationExpr.Parent.Parent.Parent as InvocationExpressionSyntax; // Assert.IsTrue(a.DoIt())
-                var returnType = ExtractAssertionReturnType(callingAssertionExpr);
-
-                yield return new InterfaceNameAndMethodDeclarations
-                {
-                    Name = mockedInterfaceTypes.First(),
-                    MethodDecls = new[]{
-                    Syntax.MethodDeclaration(returnType, functionNames.First()).
-                        WithModifiers(Syntax.TokenList(Syntax.Token(SyntaxKind.PublicKeyword))).
-                        WithTfmIfTrue(
-                            t => t.WithParameterList(Syntax.ParameterList(
-                                    Syntax.SeparatedList<ParameterSyntax>(fpt, Enumerable.Repeat(Syntax.Token(SyntaxKind.CommaToken), fpt.Count - 1)))),
-                            () => functionParameterTypes.Any()).
-                        WithSemicolonToken(Syntax.Token(SyntaxKind.SemicolonToken)).
-                        WithAttributeLists(Syntax.List<AttributeListSyntax>(Syntax.AttributeList().WithAttributes(Syntax.SeparatedList<AttributeSyntax>(Syntax.Attribute(Syntax.ParseName("AssertionOriginAttribute"),Syntax.AttributeArgumentList(callingAssertionExpr.ToAttributeArgumentSyntaxList()))))))}
-                };
-            }
-        }
-
         public static TypeSyntax ExtractAssertionReturnType(ExpressionStatementSyntax expr)
         {
             // Need SemanticModel here to determine type of the assertion function parameter. For now, we know that IsTrue expects a bool
@@ -473,7 +395,7 @@ namespace UnitTestTesting
             var functionUnderTestArgList = assertionArgList.SelectMany(args => args.DescendantNodes().OfType<ArgumentListSyntax>()); // () or (1)
             if (functionUnderTestArgList.First().Arguments.Any())
             {
-                return Syntax.BinaryExpression(SyntaxKind.EqualsExpression,Syntax.IdentifierName("a"),functionUnderTestArgList.First().Arguments.First().Expression);
+                return Syntax.BinaryExpression(method=="IsFalse"?SyntaxKind.NotEqualsExpression:SyntaxKind.EqualsExpression, Syntax.IdentifierName("a"), functionUnderTestArgList.First().Arguments.First().Expression);
             }
             else
                 switch (method)
