@@ -1,0 +1,1 @@
+Using Roslyn, the Microsoft .NET compiler tools, this project aims to rectify an oversight in common TDD implementations. We aim to generate our programme code from the unit tests thereby ensuring we have full test coverage and a complete set of requirements.
